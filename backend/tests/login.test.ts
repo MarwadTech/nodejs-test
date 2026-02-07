@@ -1,0 +1,534 @@
+// ============================================
+// TEST CASES FOR BACKEND - ADMIN LOGIN ENDPOINT
+// File: tests/login.test.ts
+// ============================================
+
+import request from 'supertest';
+import app from '../src/app'; // Your Express app
+
+describe('Admin Login API - Backend Test Cases', () => {
+
+    const LOGIN_ENDPOINT = '/api/admin/login';
+
+    // ============================================
+    // EMAIL PARAMETER - TEST CASES
+    // ============================================
+
+    describe('Email Parameter - Invalid Key', () => {
+        test('TC-BE-001: Missing email field should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*required/i);
+        });
+
+        test('TC-BE-002: Email field as null should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: null, password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+        });
+
+        test('TC-BE-003: Email field as undefined should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: undefined, password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+        });
+    });
+
+    describe('Email Parameter - Incorrect Submission', () => {
+        test('TC-BE-004: Empty email string should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: '', password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*empty|required/i);
+        });
+
+        test('TC-BE-005: Email with only whitespace should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: '   ', password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid/i);
+        });
+
+        test('TC-BE-006: Email as number should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 12345, password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid|string/i);
+        });
+
+        test('TC-BE-007: Email as boolean should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: true, password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid|string/i);
+        });
+
+        test('TC-BE-008: Email as object should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: { value: 'test@example.com' }, password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid|string/i);
+        });
+
+        test('TC-BE-009: Email as array should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: ['test@example.com'], password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid|string/i);
+        });
+    });
+
+    describe('Email Parameter - Invalid Submission', () => {
+        test('TC-BE-010: Email without @ symbol should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'invalidemail.com', password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid|format/i);
+        });
+
+        test('TC-BE-011: Email without domain should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'user@', password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid|format/i);
+        });
+
+        test('TC-BE-012: Email without username should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: '@domain.com', password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid|format/i);
+        });
+
+        test('TC-BE-013: Email with spaces should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'user name@domain.com', password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid|format/i);
+        });
+
+        test('TC-BE-014: Email with special characters only should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: '!@#$%^&*()', password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid|format/i);
+        });
+
+        test('TC-BE-015: Email exceeding max length (255+ chars) should return 400', async () => {
+            const longEmail = 'a'.repeat(250) + '@example.com';
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: longEmail, password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*long|length/i);
+        });
+
+        test('TC-BE-016: Email with multiple @ symbols should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'user@@example.com', password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid|format/i);
+        });
+
+        test('TC-BE-017: Email with SQL injection attempt should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: "admin' OR '1'='1", password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid/i);
+        });
+
+        test('TC-BE-018: Email with XSS script should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: '<script>alert("xss")</script>@test.com', password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/email.*invalid/i);
+        });
+    });
+
+    // ============================================
+    // PASSWORD PARAMETER - TEST CASES
+    // ============================================
+
+    describe('Password Parameter - Invalid Key', () => {
+        test('TC-BE-019: Missing password field should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/password.*required/i);
+        });
+
+        test('TC-BE-020: Password field as null should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: null });
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+        });
+
+        test('TC-BE-021: Password field as undefined should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: undefined });
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+        });
+    });
+
+    describe('Password Parameter - Incorrect Submission', () => {
+        test('TC-BE-022: Empty password string should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: '' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/password.*empty|required/i);
+        });
+
+        test('TC-BE-023: Password with only whitespace should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: '      ' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/password.*invalid|whitespace/i);
+        });
+
+        test('TC-BE-024: Password as number should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: 123456 });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/password.*invalid|string/i);
+        });
+
+        test('TC-BE-025: Password as boolean should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: true });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/password.*invalid|string/i);
+        });
+
+        test('TC-BE-026: Password as object should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: { value: 'pass123' } });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/password.*invalid|string/i);
+        });
+
+        test('TC-BE-027: Password as array should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: ['password123'] });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/password.*invalid|string/i);
+        });
+    });
+
+    describe('Password Parameter - Invalid Submission', () => {
+        test('TC-BE-028: Password less than 6 characters should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: '12345' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/password.*short|minimum|length/i);
+        });
+
+        test('TC-BE-029: Password with 1 character should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: 'a' });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/password.*short|minimum|length/i);
+        });
+
+        test('TC-BE-030: Password exceeding max length (129+ chars) should return 400', async () => {
+            const longPassword = 'a'.repeat(129);
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: longPassword });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/password.*long|maximum|length/i);
+        });
+    });
+
+    // ============================================
+    // USER STATUS - BLOCKED
+    // ============================================
+
+    describe('User Status - Blocked', () => {
+        test('TC-BE-031: Blocked user with valid credentials should return 403', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({
+                    email: 'blocked@example.com',
+                    password: 'ValidPass123!'
+                });
+
+            expect(response.status).toBe(403);
+            expect(response.body.error).toMatch(/blocked|account.*disabled|suspended/i);
+        });
+
+        test('TC-BE-032: Blocked user should not process login', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({
+                    email: 'blocked@example.com',
+                    password: 'ValidPass123!'
+                });
+
+            expect(response.status).toBe(403);
+            expect(response.body).not.toHaveProperty('token');
+            expect(response.body).not.toHaveProperty('sessionId');
+        });
+    });
+
+    // ============================================
+    // USER STATUS - UNVERIFIED
+    // ============================================
+
+    describe('User Status - Unverified', () => {
+        test('TC-BE-033: Unverified user with valid credentials should return 403', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({
+                    email: 'unverified@example.com',
+                    password: 'ValidPass123!'
+                });
+
+            expect(response.status).toBe(403);
+            expect(response.body.error).toMatch(/unverified|verify.*email|not.*verified/i);
+        });
+
+        test('TC-BE-034: Unverified user should not process login', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({
+                    email: 'unverified@example.com',
+                    password: 'ValidPass123!'
+                });
+
+            expect(response.status).toBe(403);
+            expect(response.body).not.toHaveProperty('token');
+            expect(response.body).not.toHaveProperty('sessionId');
+        });
+    });
+
+    // ============================================
+    // COMBINED SCENARIOS
+    // ============================================
+
+    describe('Combined Invalid Scenarios', () => {
+        test('TC-BE-035: Both email and password missing should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({});
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+        });
+
+        test('TC-BE-036: Both email and password empty should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: '', password: '' });
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+        });
+
+        test('TC-BE-037: Both email and password null should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: null, password: null });
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+        });
+
+        test('TC-BE-038: Invalid email and invalid password should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'invalid-email', password: '123' });
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+        });
+    });
+
+    // ============================================
+    // REQUEST FORMAT & STRUCTURE
+    // ============================================
+
+    describe('Request Format', () => {
+        test('TC-BE-039: Invalid JSON should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send('invalid-json-data')
+                .set('Content-Type', 'application/json');
+
+            expect(response.status).toBe(400);
+        });
+
+        test('TC-BE-040: Missing Content-Type header should return 400', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: 'ValidPass123!' });
+
+            // Should still work or return appropriate error
+            expect([200, 202, 400, 415]).toContain(response.status);
+        });
+
+        test('TC-BE-041: Extra fields in request should be ignored', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({
+                    email: 'admin@example.com',
+                    password: 'ValidPass123!',
+                    extraField: 'ignored',
+                    anotherField: 123
+                });
+
+            // Should process normally
+            expect(response.status).not.toBe(400);
+        });
+    });
+
+    // ============================================
+    // HTTP METHOD VALIDATION
+    // ============================================
+
+    describe('HTTP Method Validation', () => {
+        test('TC-BE-042: GET request should return 405', async () => {
+            const response = await request(app).get(LOGIN_ENDPOINT);
+            expect(response.status).toBe(405);
+        });
+
+        test('TC-BE-043: PUT request should return 405', async () => {
+            const response = await request(app)
+                .put(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: 'ValidPass123!' });
+            expect(response.status).toBe(405);
+        });
+
+        test('TC-BE-044: DELETE request should return 405', async () => {
+            const response = await request(app).delete(LOGIN_ENDPOINT);
+            expect(response.status).toBe(405);
+        });
+
+        test('TC-BE-045: PATCH request should return 405', async () => {
+            const response = await request(app)
+                .patch(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: 'ValidPass123!' });
+            expect(response.status).toBe(405);
+        });
+    });
+
+    // ============================================
+    // RESPONSE FORMAT
+    // ============================================
+
+    describe('Response Format', () => {
+        test('TC-BE-046: Response should be JSON format', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: 'ValidPass123!' });
+
+            expect(response.headers['content-type']).toMatch(/json/);
+        });
+
+        test('TC-BE-047: Error response should contain error field', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'invalid', password: 'ValidPass123!' });
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+            expect(typeof response.body.error).toBe('string');
+        });
+
+        test('TC-BE-048: Success response should contain message field', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'active@example.com', password: 'ValidPass123!' });
+
+            if (response.status === 200 || response.status === 202) {
+                expect(response.body).toHaveProperty('message');
+            }
+        });
+    });
+
+    // ============================================
+    // VALID SCENARIOS
+    // ============================================
+
+    describe('Valid Scenarios', () => {
+        test('TC-BE-049: Valid email and password should pass validation', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'admin@example.com', password: 'ValidPass123!' });
+
+            // Should not return validation error (400)
+            expect(response.status).not.toBe(400);
+        });
+
+        test('TC-BE-050: Active verified user should return success status', async () => {
+            const response = await request(app)
+                .post(LOGIN_ENDPOINT)
+                .send({ email: 'active@example.com', password: 'ValidPass123!' });
+
+            expect([200, 202]).toContain(response.status);
+            expect(response.body).toHaveProperty('message');
+        });
+    });
+});

@@ -1,0 +1,75 @@
+
+> backend@1.0.0 test
+> jest --runInBand
+
+PASS tests/login.test.ts
+  Admin Login API - Backend Test Cases
+    Email Parameter - Invalid Key
+      ΓêÜ TC-BE-001: Missing email field should return 400 (58 ms)
+      ΓêÜ TC-BE-002: Email field as null should return 400 (11 ms)
+      ΓêÜ TC-BE-003: Email field as undefined should return 400 (7 ms)
+    Email Parameter - Incorrect Submission
+      ΓêÜ TC-BE-004: Empty email string should return 400 (8 ms)
+      ΓêÜ TC-BE-005: Email with only whitespace should return 400 (8 ms)
+      ΓêÜ TC-BE-006: Email as number should return 400 (8 ms)
+      ΓêÜ TC-BE-007: Email as boolean should return 400 (8 ms)
+      ΓêÜ TC-BE-008: Email as object should return 400 (7 ms)
+      ΓêÜ TC-BE-009: Email as array should return 400 (9 ms)
+    Email Parameter - Invalid Submission
+      ΓêÜ TC-BE-010: Email without @ symbol should return 400 (9 ms)
+      ΓêÜ TC-BE-011: Email without domain should return 400 (7 ms)
+      ΓêÜ TC-BE-012: Email without username should return 400 (7 ms)
+      ΓêÜ TC-BE-013: Email with spaces should return 400 (7 ms)
+      ΓêÜ TC-BE-014: Email with special characters only should return 400 (9 ms)
+      ΓêÜ TC-BE-015: Email exceeding max length (255+ chars) should return 400 (7 ms)
+      ΓêÜ TC-BE-016: Email with multiple @ symbols should return 400 (7 ms)
+      ΓêÜ TC-BE-017: Email with SQL injection attempt should return 400 (7 ms)
+      ΓêÜ TC-BE-018: Email with XSS script should return 400 (7 ms)
+    Password Parameter - Invalid Key
+      ΓêÜ TC-BE-019: Missing password field should return 400 (6 ms)
+      ΓêÜ TC-BE-020: Password field as null should return 400 (6 ms)
+      ΓêÜ TC-BE-021: Password field as undefined should return 400 (6 ms)
+    Password Parameter - Incorrect Submission
+      ΓêÜ TC-BE-022: Empty password string should return 400 (7 ms)
+      ΓêÜ TC-BE-023: Password with only whitespace should return 400 (9 ms)
+      ΓêÜ TC-BE-024: Password as number should return 400 (6 ms)
+      ΓêÜ TC-BE-025: Password as boolean should return 400 (6 ms)
+      ΓêÜ TC-BE-026: Password as object should return 400 (6 ms)
+      ΓêÜ TC-BE-027: Password as array should return 400 (6 ms)
+    Password Parameter - Invalid Submission
+      ΓêÜ TC-BE-028: Password less than 6 characters should return 400 (6 ms)
+      ΓêÜ TC-BE-029: Password with 1 character should return 400 (6 ms)
+      ΓêÜ TC-BE-030: Password exceeding max length (129+ chars) should return 400 (6 ms)
+    User Status - Blocked
+      ΓêÜ TC-BE-031: Blocked user with valid credentials should return 403 (7 ms)
+      ΓêÜ TC-BE-032: Blocked user should not process login (6 ms)
+    User Status - Unverified
+      ΓêÜ TC-BE-033: Unverified user with valid credentials should return 403 (6 ms)
+      ΓêÜ TC-BE-034: Unverified user should not process login (6 ms)
+    Combined Invalid Scenarios
+      ΓêÜ TC-BE-035: Both email and password missing should return 400 (5 ms)
+      ΓêÜ TC-BE-036: Both email and password empty should return 400 (6 ms)
+      ΓêÜ TC-BE-037: Both email and password null should return 400 (6 ms)
+      ΓêÜ TC-BE-038: Invalid email and invalid password should return 400 (6 ms)
+    Request Format
+      ΓêÜ TC-BE-039: Invalid JSON should return 400 (13 ms)
+      ΓêÜ TC-BE-040: Missing Content-Type header should return 400 (7 ms)
+      ΓêÜ TC-BE-041: Extra fields in request should be ignored (6 ms)
+    HTTP Method Validation
+      ΓêÜ TC-BE-042: GET request should return 405 (6 ms)
+      ΓêÜ TC-BE-043: PUT request should return 405 (6 ms)
+      ΓêÜ TC-BE-044: DELETE request should return 405 (5 ms)
+      ΓêÜ TC-BE-045: PATCH request should return 405 (5 ms)
+    Response Format
+      ΓêÜ TC-BE-046: Response should be JSON format (5 ms)
+      ΓêÜ TC-BE-047: Error response should contain error field (5 ms)
+      ΓêÜ TC-BE-048: Success response should contain message field (5 ms)
+    Valid Scenarios
+      ΓêÜ TC-BE-049: Valid email and password should pass validation (5 ms)
+      ΓêÜ TC-BE-050: Active verified user should return success status (5 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       50 passed, 50 total
+Snapshots:   0 total
+Time:        5.316 s
+Ran all test suites.
