@@ -2,244 +2,139 @@
 > backend@1.0.0 test
 > jest --runInBand
 
-FAIL tests/login.test.ts
+FAIL tests/routes/user.routes.test.ts
+  User Routes
+    ΓêÜ POST /api/login should call UserController.login (71 ms)
+    ├ù GET /api/login should return 405 Method Not Allowed (70 ms)
+
+  ΓùÅ User Routes ΓÇ║ GET /api/login should return 405 Method Not Allowed
+
+    Route.post() requires a callback function but got a [object Undefined]
+
+       6 |
+       7 |
+    >  8 | router.post('/login', userController.login);
+         |        ^
+       9 |
+      10 | router.all('/login', (req, res) => {
+      11 |     res.status(405).json({ error: "Method Not Allowed" });
+
+      at Route.<computed> [as post] (node_modules/express/lib/router/route.js:216:15)
+      at Function.proto.<computed> [as post] (node_modules/express/lib/router/index.js:521:19)
+      at Object.<anonymous> (src/routes/user.routes.ts:8:8)
+      at tests/routes/user.routes.test.ts:31:29
+      at Object.<anonymous> (tests/routes/user.routes.test.ts:31:29)
+
+PASS tests/login.test.ts
   Admin Login API - Backend Test Cases
     Email Parameter - Invalid Key
-      ΓêÜ TC-BE-001: Missing email field should return 400 (65 ms)
-      ΓêÜ TC-BE-002: Email field as null should return 400 (10 ms)
+      ΓêÜ TC-BE-001: Missing email field should return 400 (18 ms)
+      ΓêÜ TC-BE-002: Email field as null should return 400 (8 ms)
       ΓêÜ TC-BE-003: Email field as undefined should return 400 (8 ms)
     Email Parameter - Incorrect Submission
-      ΓêÜ TC-BE-004: Empty email string should return 400 (7 ms)
+      ΓêÜ TC-BE-004: Empty email string should return 400 (14 ms)
       ΓêÜ TC-BE-005: Email with only whitespace should return 400 (8 ms)
-      ΓêÜ TC-BE-006: Email as number should return 400 (7 ms)
-      ΓêÜ TC-BE-007: Email as boolean should return 400 (8 ms)
-      ΓêÜ TC-BE-008: Email as object should return 400 (6 ms)
-      ΓêÜ TC-BE-009: Email as array should return 400 (8 ms)
+      ΓêÜ TC-BE-006: Email as number should return 400 (8 ms)
+      ΓêÜ TC-BE-007: Email as boolean should return 400 (7 ms)
+      ΓêÜ TC-BE-008: Email as object should return 400 (7 ms)
+      ΓêÜ TC-BE-009: Email as array should return 400 (7 ms)
     Email Parameter - Invalid Submission
       ΓêÜ TC-BE-010: Email without @ symbol should return 400 (8 ms)
       ΓêÜ TC-BE-011: Email without domain should return 400 (7 ms)
-      ΓêÜ TC-BE-012: Email without username should return 400 (6 ms)
+      ΓêÜ TC-BE-012: Email without username should return 400 (9 ms)
       ΓêÜ TC-BE-013: Email with spaces should return 400 (7 ms)
       ΓêÜ TC-BE-014: Email with special characters only should return 400 (7 ms)
-      ΓêÜ TC-BE-015: Email exceeding max length (255+ chars) should return 400 (8 ms)
+      ΓêÜ TC-BE-015: Email exceeding max length (255+ chars) should return 400 (7 ms)
       ΓêÜ TC-BE-016: Email with multiple @ symbols should return 400 (7 ms)
       ΓêÜ TC-BE-017: Email with SQL injection attempt should return 400 (7 ms)
-      ΓêÜ TC-BE-018: Email with XSS script should return 400 (7 ms)
+      ΓêÜ TC-BE-018: Email with XSS script should return 400 (8 ms)
     Password Parameter - Invalid Key
       ΓêÜ TC-BE-019: Missing password field should return 400 (7 ms)
-      ΓêÜ TC-BE-020: Password field as null should return 400 (7 ms)
-      ΓêÜ TC-BE-021: Password field as undefined should return 400 (7 ms)
+      ΓêÜ TC-BE-020: Password field as null should return 400 (8 ms)
+      ΓêÜ TC-BE-021: Password field as undefined should return 400 (6 ms)
     Password Parameter - Incorrect Submission
       ΓêÜ TC-BE-022: Empty password string should return 400 (7 ms)
       ΓêÜ TC-BE-023: Password with only whitespace should return 400 (7 ms)
-      ΓêÜ TC-BE-024: Password as number should return 400 (6 ms)
+      ΓêÜ TC-BE-024: Password as number should return 400 (5 ms)
       ΓêÜ TC-BE-025: Password as boolean should return 400 (6 ms)
-      ΓêÜ TC-BE-026: Password as object should return 400 (5 ms)
+      ΓêÜ TC-BE-026: Password as object should return 400 (6 ms)
       ΓêÜ TC-BE-027: Password as array should return 400 (6 ms)
     Password Parameter - Invalid Submission
-      ΓêÜ TC-BE-028: Password less than 6 characters should return 400 (6 ms)
+      ΓêÜ TC-BE-028: Password less than 6 characters should return 400 (7 ms)
       ΓêÜ TC-BE-029: Password with 1 character should return 400 (6 ms)
-      ΓêÜ TC-BE-030: Password exceeding max length (129+ chars) should return 400 (7 ms)
+      ΓêÜ TC-BE-030: Password exceeding max length (129+ chars) should return 400 (8 ms)
     User Status - Blocked
-      ├ù TC-BE-031: Blocked user with valid credentials should return 403 (12 ms)
-      ├ù TC-BE-032: Blocked user should not process login (6 ms)
+      ΓêÜ TC-BE-031: Blocked user with valid credentials should return 403 (6 ms)
+      ΓêÜ TC-BE-032: Blocked user should not process login (6 ms)
     User Status - Unverified
-      ├ù TC-BE-033: Unverified user with valid credentials should return 403 (9 ms)
-      ├ù TC-BE-034: Unverified user should not process login (6 ms)
+      ΓêÜ TC-BE-033: Unverified user with valid credentials should return 403 (6 ms)
+      ΓêÜ TC-BE-034: Unverified user should not process login (6 ms)
     Combined Invalid Scenarios
-      ΓêÜ TC-BE-035: Both email and password missing should return 400 (6 ms)
+      ΓêÜ TC-BE-035: Both email and password missing should return 400 (5 ms)
       ΓêÜ TC-BE-036: Both email and password empty should return 400 (6 ms)
-      ΓêÜ TC-BE-037: Both email and password null should return 400 (6 ms)
-      ΓêÜ TC-BE-038: Invalid email and invalid password should return 400 (5 ms)
+      ΓêÜ TC-BE-037: Both email and password null should return 400 (9 ms)
+      ΓêÜ TC-BE-038: Invalid email and invalid password should return 400 (6 ms)
     Request Format
-      ΓêÜ TC-BE-039: Invalid JSON should return 400 (15 ms)
-      ├ù TC-BE-040: Missing Content-Type header should return 400 (35 ms)
-      ΓêÜ TC-BE-041: Extra fields in request should be ignored (34 ms)
+      ΓêÜ TC-BE-039: Invalid JSON should return 400 (10 ms)
+      ΓêÜ TC-BE-040: Missing Content-Type header should return 400 (5 ms)
+      ΓêÜ TC-BE-041: Extra fields in request should be ignored (5 ms)
     HTTP Method Validation
-      ├ù TC-BE-042: GET request should return 405 (44 ms)
-      ├ù TC-BE-043: PUT request should return 405 (22 ms)
-      ├ù TC-BE-044: DELETE request should return 405 (30 ms)
-      ├ù TC-BE-045: PATCH request should return 405 (20 ms)
+      ΓêÜ TC-BE-042: GET request should return 405 (6 ms)
+      ΓêÜ TC-BE-043: PUT request should return 405 (5 ms)
+      ΓêÜ TC-BE-044: DELETE request should return 405 (5 ms)
+      ΓêÜ TC-BE-045: PATCH request should return 405 (5 ms)
     Response Format
-      ΓêÜ TC-BE-046: Response should be JSON format (14 ms)
-      ΓêÜ TC-BE-047: Error response should contain error field (10 ms)
-      ΓêÜ TC-BE-048: Success response should contain message field (11 ms)
+      ΓêÜ TC-BE-046: Response should be JSON format (5 ms)
+      ΓêÜ TC-BE-047: Error response should contain error field (5 ms)
+      ΓêÜ TC-BE-048: Success response should contain message field (6 ms)
     Valid Scenarios
-      ΓêÜ TC-BE-049: Valid email and password should pass validation (12 ms)
-      ├ù TC-BE-050: Active verified user should return success status (12 ms)
+      ΓêÜ TC-BE-049: Valid email and password should pass validation (5 ms)
+      ΓêÜ TC-BE-050: Active verified user should return success status (5 ms)
 
-  ΓùÅ Admin Login API - Backend Test Cases ΓÇ║ User Status - Blocked ΓÇ║ TC-BE-031: Blocked user with valid credentials should return 403
+PASS tests/service/AuthService.test.ts
+  AuthService
+    login
+      ΓêÜ should throw error if email is missing (13 ms)
+      ΓêÜ should throw error if email is not a string (1 ms)
+      ΓêÜ should throw error if email is empty whitespace (1 ms)
+      ΓêÜ should throw error for invalid email format (1 ms)
+      ΓêÜ should throw error if email is too long (1 ms)
+      ΓêÜ should throw error for specific invalid characters (1 ms)
+      ΓêÜ should throw error if password is missing (1 ms)
+      ΓêÜ should throw error if password is not a string (1 ms)
+      ΓêÜ should throw error if password is empty whitespace
+      ΓêÜ should throw error if password is too short (1 ms)
+      ΓêÜ should throw error if password is too long (1 ms)
+      ΓêÜ should throw error if user not found (3 ms)
+      ΓêÜ should throw error if user is blocked (3 ms)
+      ΓêÜ should throw error if user is unverified
+      ΓêÜ should login successfully with valid credentials
 
-    expect(received).toBe(expected) // Object.is equality
+PASS tests/controller/UserController.test.ts
+  UserController
+    login
+      ΓêÜ should return 200 and result on success (3 ms)
+      ΓêÜ should return 400 for validation errors (1 ms)
+      ΓêÜ should return 403 for blocked users (1 ms)
+      ΓêÜ should return 403 for unverified users (1 ms)
+      ΓêÜ should return 404 if user not found (1 ms)
+      ΓêÜ should return 500 for unexpected errors (1 ms)
 
-    Expected: 403
-    Received: 404
+PASS tests/model/User.test.ts
+  User Model
+    ΓêÜ should be able to create a valid user object (1 ms)
+    ΓêÜ should allow optional password (1 ms)
 
-      316 |                 });
-      317 |
-    > 318 |             expect(response.status).toBe(403);
-          |                                     ^
-      319 |             expect(response.body.error).toMatch(/blocked|account.*disabled|suspended/i);
-      320 |         });
-      321 |
+PASS tests/repo/UserRepo.test.ts
+  UserRepo
+    findByEmail
+      ΓêÜ should return user if email exists (1 ms)
+      ΓêÜ should return null if email does not exist
+      ΓêÜ should return blocked user correctly
+      ΓêÜ should return unverified user correctly
 
-      at Object.<anonymous> (tests/login.test.ts:318:37)
-
-  ΓùÅ Admin Login API - Backend Test Cases ΓÇ║ User Status - Blocked ΓÇ║ TC-BE-032: Blocked user should not process login
-
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 403
-    Received: 404
-
-      328 |                 });
-      329 |
-    > 330 |             expect(response.status).toBe(403);
-          |                                     ^
-      331 |             expect(response.body).not.toHaveProperty('token');
-      332 |             expect(response.body).not.toHaveProperty('sessionId');
-      333 |         });
-
-      at Object.<anonymous> (tests/login.test.ts:330:37)
-
-  ΓùÅ Admin Login API - Backend Test Cases ΓÇ║ User Status - Unverified ΓÇ║ TC-BE-033: Unverified user with valid credentials should return 403
-
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 403
-    Received: 404
-
-      347 |                 });
-      348 |
-    > 349 |             expect(response.status).toBe(403);
-          |                                     ^
-      350 |             expect(response.body.error).toMatch(/unverified|verify.*email|not.*verified/i);
-      351 |         });
-      352 |
-
-      at Object.<anonymous> (tests/login.test.ts:349:37)
-
-  ΓùÅ Admin Login API - Backend Test Cases ΓÇ║ User Status - Unverified ΓÇ║ TC-BE-034: Unverified user should not process login
-
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 403
-    Received: 404
-
-      359 |                 });
-      360 |
-    > 361 |             expect(response.status).toBe(403);
-          |                                     ^
-      362 |             expect(response.body).not.toHaveProperty('token');
-      363 |             expect(response.body).not.toHaveProperty('sessionId');
-      364 |         });
-
-      at Object.<anonymous> (tests/login.test.ts:361:37)
-
-  ΓùÅ Admin Login API - Backend Test Cases ΓÇ║ Request Format ΓÇ║ TC-BE-040: Missing Content-Type header should return 400
-
-    expect(received).toContain(expected) // indexOf
-
-    Expected value: 404
-    Received array: [200, 202, 400, 415]
-
-      427 |
-      428 |             // Should still work or return appropriate error
-    > 429 |             expect([200, 202, 400, 415]).toContain(response.status);
-          |                                          ^
-      430 |         });
-      431 |
-      432 |         test('TC-BE-041: Extra fields in request should be ignored', async () => {
-
-      at Object.<anonymous> (tests/login.test.ts:429:42)
-
-  ΓùÅ Admin Login API - Backend Test Cases ΓÇ║ HTTP Method Validation ΓÇ║ TC-BE-042: GET request should return 405
-
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 405
-    Received: 404
-
-      452 |         test('TC-BE-042: GET request should return 405', async () => {
-      453 |             const response = await request(app).get(LOGIN_ENDPOINT);
-    > 454 |             expect(response.status).toBe(405);
-          |                                     ^
-      455 |         });
-      456 |
-      457 |         test('TC-BE-043: PUT request should return 405', async () => {
-
-      at Object.<anonymous> (tests/login.test.ts:454:37)
-
-  ΓùÅ Admin Login API - Backend Test Cases ΓÇ║ HTTP Method Validation ΓÇ║ TC-BE-043: PUT request should return 405
-
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 405
-    Received: 404
-
-      459 |                 .put(LOGIN_ENDPOINT)
-      460 |                 .send({ email: 'admin@example.com', password: 'ValidPass123!' });
-    > 461 |             expect(response.status).toBe(405);
-          |                                     ^
-      462 |         });
-      463 |
-      464 |         test('TC-BE-044: DELETE request should return 405', async () => {
-
-      at Object.<anonymous> (tests/login.test.ts:461:37)
-
-  ΓùÅ Admin Login API - Backend Test Cases ΓÇ║ HTTP Method Validation ΓÇ║ TC-BE-044: DELETE request should return 405
-
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 405
-    Received: 404
-
-      464 |         test('TC-BE-044: DELETE request should return 405', async () => {
-      465 |             const response = await request(app).delete(LOGIN_ENDPOINT);
-    > 466 |             expect(response.status).toBe(405);
-          |                                     ^
-      467 |         });
-      468 |
-      469 |         test('TC-BE-045: PATCH request should return 405', async () => {
-
-      at Object.<anonymous> (tests/login.test.ts:466:37)
-
-  ΓùÅ Admin Login API - Backend Test Cases ΓÇ║ HTTP Method Validation ΓÇ║ TC-BE-045: PATCH request should return 405
-
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 405
-    Received: 404
-
-      471 |                 .patch(LOGIN_ENDPOINT)
-      472 |                 .send({ email: 'admin@example.com', password: 'ValidPass123!' });
-    > 473 |             expect(response.status).toBe(405);
-          |                                     ^
-      474 |         });
-      475 |     });
-      476 |
-
-      at Object.<anonymous> (tests/login.test.ts:473:37)
-
-  ΓùÅ Admin Login API - Backend Test Cases ΓÇ║ Valid Scenarios ΓÇ║ TC-BE-050: Active verified user should return success status
-
-    expect(received).toContain(expected) // indexOf
-
-    Expected value: 404
-    Received array: [200, 202]
-
-      528 |                 .send({ email: 'active@example.com', password: 'ValidPass123!' });
-      529 |
-    > 530 |             expect([200, 202]).toContain(response.status);
-          |                                ^
-      531 |             expect(response.body).toHaveProperty('message');
-      532 |         });
-      533 |     });
-
-      at Object.<anonymous> (tests/login.test.ts:530:32)
-
-Test Suites: 1 failed, 1 total
-Tests:       10 failed, 40 passed, 50 total
+Test Suites: 1 failed, 5 passed, 6 total
+Tests:       1 failed, 78 passed, 79 total
 Snapshots:   0 total
-Time:        4.265 s, estimated 9 s
+Time:        4.401 s, estimated 7 s
 Ran all test suites.
